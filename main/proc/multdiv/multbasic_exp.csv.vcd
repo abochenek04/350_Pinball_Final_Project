@@ -1,0 +1,71 @@
+$date
+	Sun Feb  8 16:17:08 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	100ps
+$end
+$scope module multdiv_tb $end
+$var wire 1 ! except $end
+$var wire 1 " ready $end
+$var wire 32 # result [31:0] $end
+$var reg 1 $ clock $end
+$var reg 8 % counter [7:0] $end
+$var reg 1 & ctrl_Div $end
+$var reg 1 ' ctrl_Mult $end
+$var reg 1 ( exp_except $end
+$var reg 32 ) exp_result [31:0] $end
+$var reg 1 * interrupt $end
+$var reg 32 + operandA [31:0] $end
+$var reg 32 , operandB [31:0] $end
+$var reg 512 - testName [511:0] $end
+$var integer 32 . actFile [31:0] $end
+$var integer 32 / diffFile [31:0] $end
+$var integer 32 0 errors [31:0] $end
+$var integer 32 1 expFile [31:0] $end
+$var integer 32 2 expScan [31:0] $end
+$var integer 32 3 i [31:0] $end
+$var integer 32 4 tests [31:0] $end
+$scope module tester $end
+$var wire 1 $ clock $end
+$var wire 1 & ctrl_DIV $end
+$var wire 1 ' ctrl_MULT $end
+$var wire 1 ! data_exception $end
+$var wire 32 5 data_operandA [31:0] $end
+$var wire 32 6 data_operandB [31:0] $end
+$var wire 32 7 data_result [31:0] $end
+$var wire 1 " data_resultRDY $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b0 7
+bx 6
+bx 5
+b0 4
+b0 3
+bx 2
+b0 1
+b0 0
+bx /
+bx .
+b110110101110101011011000111010001100010011000010111001101101001011000110101111101100101011110000111000000101110011000110111001101110110 -
+bx ,
+bx +
+x*
+bx )
+x(
+x'
+x&
+b0 %
+0$
+b0 #
+1"
+0!
+$end

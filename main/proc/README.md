@@ -1,0 +1,30 @@
+# Processor
+## NAME (NETID)
+Allan Bochenek (amb350)
+
+## Description of Design
+This is my 5-stage pipelined processor. This processor works by passing a wide range of instructions (provided in the instruction set from the ISA) through each stage of the pipeline (PC, F/D, D/X, X/M, M/W), latching specific pieces of information into registers that hold those values until they need to be passed down the pipeline. This processor also prevents any potential errors from occurring with the implementation of bypassing (and stalling).
+
+I have opted to utilize multiple, smaller 32-bit registers for each stage, as opposed to creating larger registers that hold more information. For example, instead of storing A, B, and IR in one register (containing the outputs of the register file), I hold these values in 3 separate registers, dxA, dxB, and dxIR, with dx symbolizing the stage that we are using the latched value in. I also label the inputs and outputs to these registers with the appropriate suffix (in or out) to more easily understand which values I am dealing with.
+
+At a high level, first, an instruction is fetched from memory. Then, the instruction passes into the F/D stage, where its bits are analyzed and processed (decoded) to determine the instruction type (based on opcode/ALU opcode). Then, the instruction moves into the execute stage, where (depending on the instruction) that type of operation is executed. In the execute stage, there is lots of logic that helps perform this action. Then, any outputs are processed further into the memory stage, where, if necessary, the results are saved to data memory. Finally, if necessary, the results are written back to the register file from the writeback stage. There is also a program counter (PC register) that keeps track of the count that the processor is on.
+
+Now, there is not just one instruction being processed at a time. Each time an instruction gets passed into the pipeline, a new instruction is immediately taken from instruction memory and begins its process down the pipeline one cycle behind the previously mentioned instruction. Because the processor is word-addressed, the PC will increment by 1 (instruction) each cycle instead of by 4 bytes. This cycle continues on, with new instructions being fed down the pipeline (assuming no stalling). This means that multiple instructions are being evaluated at once, which (in theory) would speed up the processor by up to 5x compared to the non-pipelined processor (but in reality, this is unrealistic because of certain instruction delays).
+
+## Bypassing
+Some instructions, however, rely on values in registers that have not yet been updated and are still in the memory or writeback stage of the processor. To fix this, bypassing (BP) is implemented. Bypassing is a series of logic implementations that check to see if at any point there are a series of instructions that may run into the bug of needing values from registers that have not yet been written to. In my design, I implement MX BP, WX BP, WM BP, exception BP (overflow or mult/div happening), and indirect register target BP through a collection of muxes that prioritize checking certain conditions (including instruction type, write enables, and registers) to make decisions that will provide every instruction the correct value it needs for its operation.
+
+## Stalling
+I implement stalling in my design to account for the multiplication and division operations in my processor because multiplication and division operations take multiple cycles to complete. When a mult or div instruction is in the execute stage, a flag is sent to notify the processor that there is an operation that needs time to complete. As such, the "stall_multdiv" variable will be turned on and will remain on until the operation is complete. During this time, the pipeline registers stop advancing until the mult/div finishes. All of the enables of the registers in the processor are controlled by an inverted stall signal: when stall is not active, stall is false, so enable is true. When the stall is active, stall is true, so enable is false. This leaves time for the multiplication or division operations to complete. When the operations are complete after some number of cycles, signaled by a ready flag in the multdiv unit, this will trigger a logic expression to turn stalling false, meaning that enables are set to true and the processor can resume its operations.
+
+In addition to the stalling needed for multiplication and division, I implement a hardware interlock to ensure data hazards with lw, both 1- and 2-cycle, are resolved. When a hazard is detected, the PC and F/D registers freeze while the instructions already in the pipeline finish and retrieve the necessary data memory. This stall does not occur, however, if the instruction is an sw (WM BP instead) or if the $r0 register is the target.
+
+There are also occasions when a branch or a jump instruction is taken. As such, the instructions already in the fetch and decode stages are incorrect and need to be flushed out. When this is the case, NOPs (32-bit 0s) are sent into the pipeline and registers, and the instructions in these first two stages (PC & F/D) are cleared. The PC updates to the new target address.
+
+## Optimizations
+- When the processor recieves a lw, only the PC and F/D stages are paused (as opposed to the whole pipeline). As a result, the instructions in the latter half of the pipeline can finish making their way through the writeback stage.
+- Using multiple, smaller 32-bit registers instead of one massive register at each pipeline stage not only provides a neater interpretation of the processor but also makes it easier to dial in and fix issues directly with the specified register.
+- Since $r0 is always 0, there is no need to implement bypassing and stalling logic. As a result, I do not implement any of these actions for the $r0, as there is no need to take time/cost if working with $r0.
+
+## Bugs
+There are no bugs in this CPU implementation.

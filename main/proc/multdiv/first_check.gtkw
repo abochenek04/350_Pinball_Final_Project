@@ -1,0 +1,45 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Wed Feb 18 03:59:29 2026
+[*]
+[dumpfile] "/Users/allanbochenek/Desktop/ECE 350/Project/multdiv/divbasic.vcd"
+[dumpfile_mtime] "Wed Feb 18 03:38:56 2026"
+[dumpfile_size] 695091
+[savefile] "/Users/allanbochenek/Desktop/ECE 350/Project/multdiv/first_check.gtkw"
+[timestart] 0
+[size] 1888 909
+[pos] -1 -1
+*-18.891954 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[treeopen] multdiv_tb.
+[treeopen] multdiv_tb.tester.
+[treeopen] multdiv_tb.tester.division.
+[sst_width] 255
+[signals_width] 885
+[sst_expanded] 1
+[sst_vpaned_height] 267
+@420
+multdiv_tb.tester.division.final_div_before[31:0]
+multdiv_tb.tester.division.data_result[31:0]
+multdiv_tb.tester.division.data_operandA[31:0]
+multdiv_tb.tester.division.data_operandB[31:0]
+multdiv_tb.tester.division.A_negative.A[31:0]
+multdiv_tb.tester.division.A_negative.B[31:0]
+multdiv_tb.tester.division.A_negative.S[31:0]
+multdiv_tb.tester.division.B_negative.A[31:0]
+multdiv_tb.tester.division.B_negative.B[31:0]
+multdiv_tb.tester.division.B_negative.S[31:0]
+@28
+multdiv_tb.tester.division.A_sign
+multdiv_tb.tester.division.B_sign
+@420
+multdiv_tb.tester.division.M_initial[31:0]
+multdiv_tb.tester.division.Q_initial[31:0]
+@28
+multdiv_tb.tester.division.starting_term[63:0]
+multdiv_tb.tester.division.divison_register_in[63:0]
+multdiv_tb.tester.division.divison_register_out[63:0]
+multdiv_tb.tester.division.shifted_divison[63:0]
+@29
+multdiv_tb.tester.division.before_shifting_sign
+[pattern_trace] 1
+[pattern_trace] 0

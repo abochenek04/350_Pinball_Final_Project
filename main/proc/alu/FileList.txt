@@ -1,0 +1,6 @@
+./alu.v
+./alu_tb.v
+./cla32.v
+./cla32_tb.v
+./cla8.v
+./cla8_tb.v
