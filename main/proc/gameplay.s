@@ -1,7 +1,16 @@
+
+#$r1 = lives
+#$r2 = score
+#$r4 = state of the last pressed bumper
+#$r6 = 
+#$r8 = constant 1 value
+#$r9 = constant 100 value
+
+
 addi $r1, $r0, 3 # lives_reg = 3
 addi $r2, $r0, 0 # score = 0
 addi $r4, $r0, 0 # bumper_old_reg = 0
-addi $r6, $r0, 0 # ball_lost_old_reg = 0
+addi $r6, $r0, 0 # live_lost_old_reg = 0
 addi $r8, $r0, 1 # constant 1
 addi $r9, $r0, 100 # constant 100
 
@@ -24,17 +33,17 @@ check_bumper_fall:
     addi $r4, $r0, 0        # bumper_old_reg = 0
 
 check_ball_islost:
-    # if ball_lost_reg == 1 and ball_lost_old_reg == 0
+    # if live_lost_reg == 1 and live_lost_old_reg == 0
     bne  $r5, $r8, check_ball_islostend 
     bne  $r6, $r0, check_ball_islostend 
     addi $r1, $r1, -1   # lives_reg -= 1
-    addi $r6, $r0, 1  # ball_lost_old_reg = 1
+    addi $r6, $r0, 1  # live_lost_old_reg = 1
 
 check_ball_islostend:
-    # if ball_lost_reg == 0 and ball_lost_old_reg == 1
+    # if live_lost_reg == 0 and live_lost_old_reg == 1
     bne  $r5, $r0, loop_back
     bne  $r6, $r8, loop_back
-    addi $r6, $r0, 0        # ball_lost_old_reg = 0
+    addi $r6, $r0, 0       # live_lost_old_reg = 0
 
 loop_back:
     j main_loop
