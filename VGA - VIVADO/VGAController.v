@@ -165,11 +165,21 @@ module VGAController(
         score_label[4] = 69; // E
     end
     
+
+    //Change the 32 bit input from the score register ($2) to a decimal value (up to 5 decimal values long)
+
+    //always be chekcing this (always loop perhaps)
+    //once we have a input that is 5 digits (ie. 32400), 
+    //use logic to decode what the digit is at each spot (or extract bit by bit from this value actually)?
+
+    //instead of hardcoding a specific avlue, take this general number (for exmaple 3) in that position and find its ASCII value and assign that to print
+
+
     //chnage to reflect score obtained by user during gameplay
     //feed input from register. Either the full score, or break down the register bits into indiviaul and then place the individuals
     reg [7:0] score_digits [0:SCORE_DIGITS-1];
     initial begin
-        VGA_score)
+        VGA_score
         score_digits[0] = 48; // '0'
         score_digits[1] = 52; // '4'
         score_digits[2] = 53; // '5'
