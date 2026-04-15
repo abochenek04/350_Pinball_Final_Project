@@ -42,6 +42,27 @@ module regfile (
                 .q(regi[j]), 
                 .clr(ctrl_reset)
             );
+
+			
+            // WE NEED 5 REGISTERs IN TOTAL one for the 2 triangles one for each mushroom and one for the ball return
+
+            assign dataToWrite = (i == 28) ? bumper1 : data_writeReg;
+            assign we = (i == 28) ? 1'bl : decoded_writeReg[i];
+
+			assign dataToWrite = (i == 29) ? bumper2 : data_writeReg;
+			assign we = (i == 29) ? 1'bl : decoded_writeReg[i];
+
+			assign dataToWrite = (i == 30) ? bumper3 : data_writeReg;
+			assign we = (i == 30) ? 1'bl : decoded_writeReg[i];
+
+			assign dataToWrite = (i == 31) ? bumper4 : data_writeReg;
+			assign we = (i == 31) ? 1'bl : decoded_writeReg[i];
+
+
+            assign VGA_score = (i == 32) ? regOut : {32{1'bz}};
+			
+			
+
         end
     endgenerate
 

@@ -33,7 +33,6 @@ module Wrapper (clock, reset);
 		rData, regA, regB,
 		memAddr, memDataIn, memDataOut;
 
-
 	// ADD YOUR MEMORY FILE HERE
 	localparam INSTR_FILE = "";
 	
@@ -59,11 +58,20 @@ module Wrapper (clock, reset);
 		.dataOut(instData));
 	
 	// Register File
+//our inputs
+		assign bumper1 = {31'b0, BTNR};
+		assign bumper2 = {31'b0, BTNL};
+		assign bumper3 = {31'b0, BTNU};
+		assign bumper4 = {31'b0, BTND};
+		wire [31:0] VGA_score;
+
+
+
 	regfile RegisterFile(.clock(clock), 
 		.ctrl_writeEnable(rwe), .ctrl_reset(reset), 
 		.ctrl_writeReg(rd),
 		.ctrl_readRegA(rs1), .ctrl_readRegB(rs2), 
-		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB));
+		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB), .bumper1(bumper1), .bumper2(bumper2),.bumper3(bumper3),.bumper4(bumper4), .VGA_score(VGA_score));
 						
 	// Processor Memory (RAM)
 	RAM ProcMem(.clk(clock), 

@@ -8,6 +8,7 @@ module VGAController(
     output[3:0] VGA_R,  
     output[3:0] VGA_G,  
     output[3:0] VGA_B
+    input [31:0] VGA_score
     );
 
     // --- Signals ---
@@ -168,6 +169,7 @@ module VGAController(
     //feed input from register. Either the full score, or break down the register bits into indiviaul and then place the individuals
     reg [7:0] score_digits [0:SCORE_DIGITS-1];
     initial begin
+        VGA_score)
         score_digits[0] = 48; // '0'
         score_digits[1] = 52; // '4'
         score_digits[2] = 53; // '5'

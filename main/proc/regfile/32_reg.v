@@ -14,6 +14,8 @@ module reg_32(d, clk, ena, q, clr);
                 .q(q[k]), 
                 .clr(clr)
             );
+
+
         end
     endgenerate
 
