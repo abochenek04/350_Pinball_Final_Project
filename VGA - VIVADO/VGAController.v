@@ -54,6 +54,8 @@ module VGAController(
     localparam SCORE_DIGITS = 4;
     localparam SCORE_CHAR_WIDTH = 50;
     localparam SCORE_SPRITE_WIDTH = 50;
+
+    //change to be dependong on a register input 
     localparam SCORE_Y = 100;
     localparam SCORE_X = (640 - (SCORE_LABEL_LEN + SCORE_DIGITS) * SCORE_CHAR_WIDTH) / 2;
 
@@ -163,6 +165,7 @@ module VGAController(
     end
     
     //chnage to reflect score obtained by user during gameplay
+    //feed input from register. Either the full score, or break down the register bits into indiviaul and then place the individuals
     reg [7:0] score_digits [0:SCORE_DIGITS-1];
     initial begin
         score_digits[0] = 48; // '0'
