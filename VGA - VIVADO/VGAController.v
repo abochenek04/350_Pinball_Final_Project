@@ -11,6 +11,12 @@ module VGAController(
 );
     // --- Signals ---
     reg [9:0] ref_x, ref_y;
+
+    wire [7:0] ascii_tenThou;
+    wire [7:0] ascii_thousands;
+    wire [7:0] ascii_hundreds;
+    wire [7:0] ascii_tens;
+    wire [7:0] ascii_ones;
     
     localparam FILES_PATH = "C:/Users/amb350/Downloads/lab7-8_kit/";
 
@@ -50,7 +56,7 @@ module VGAController(
     localparam TEXT_X = (640 - 12*CHAR_WIDTH)/2;
     
     localparam SCORE_LABEL_LEN = 5;
-    localparam SCORE_DIGITS = 4;
+    localparam SCORE_DIGITS = 5;
     localparam SCORE_CHAR_WIDTH = 50;
     localparam SCORE_SPRITE_WIDTH = 50;
 
@@ -154,7 +160,6 @@ module VGAController(
     assign draw_text_pixel = inside_text && valid_char && sprite_bit;
     
 
-    wire [7:0] score_ascii_3, score_ascii_2, score_ascii_1, score_ascii_0;
 
 
 
@@ -181,21 +186,22 @@ module VGAController(
 
     //chnage to reflect score obtained by user during gameplay
     //feed input from register. Either the full score, or break down the register bits into indiviaul and then place the individuals
-        score_to_ascii s2a(
-    .score(VGA_score),
-    .ascii_thousands(score_ascii_3),
-    .ascii_hundreds(score_ascii_2),
-    .ascii_tens(score_ascii_1),
-    .ascii_ones(score_ascii_0)
+    score_to_ascii score_conv (
+        .score(VGA_score),
+        .ascii_tenThou(ascii_tenThou),
+        .ascii_thousands(ascii_thousands),
+        .ascii_hundreds(ascii_hundreds),
+        .ascii_tens(ascii_tens),
+        .ascii_ones(ascii_ones)
     );
     
     reg [7:0] score_digits [0:SCORE_DIGITS-1];
     initial begin
-        score_digits[1] = VGA_score[0];
-        score_digits[0] = VGA_score[1]; // '0'
-        score_digits[1] = VGA_score[2]; // '4'
-        score_digits[2] = VGA_score[3]; // '5'
-        score_digits[3] = VGA_score[4]; // '9'
+        score_digits[0] = ascii_tenThou;
+        score_digits[1] = ascii_thousands; // '0'
+        score_digits[2] = ascii_hundreds; // '4'
+        score_digits[3] = ascii_tens; // '5'
+        score_digits[4] = ascii_ones; // '9'
     end
     
     wire inside_score;
