@@ -32,43 +32,38 @@ module regfile (
     endgenerate
 
 
-genvar j;
-generate
-    for (j = 1; j < 32; j = j + 1) begin : REGS
-        wire [31:0] dataToWrite;
-        wire we;
+    genvar j;
+    generate
+        for (j = 1; j < 32; j = j + 1) begin : REGS
+            wire [31:0] dataToWrite;
+            wire we;
 
-        assign dataToWrite =
-            (j == 28) ? {31'b0, JD[1]} :
-            (j == 29) ? {31'b0, JD[2]} :
-            (j == 30) ? {31'b0, JD[3]} :
-            (j == 31) ? {31'b0, JD[4]} :
-                        data_writeReg;
+            assign dataToWrite =
+                (j == 28) ? {31'b0, JD[1]} :
+                (j == 29) ? {31'b0, JD[2]} :
+                (j == 30) ? {31'b0, JD[3]} :
+                (j == 31) ? {31'b0, JD[4]} :
+                            data_writeReg;
 
-        assign we =
-            (j == 28) ? 1'b1 :
-            (j == 29) ? 1'b1 :
-            (j == 30) ? 1'b1 :
-            (j == 31) ? 1'b1 :
-                        w1[j];
+            assign we =
+                (j == 28) ? 1'b1 :
+                (j == 29) ? 1'b1 :
+                (j == 30) ? 1'b1 :
+                (j == 31) ? 1'b1 :
+                            w1[j];
 
-        reg_32 banana(
-            .d(dataToWrite),
-            .clk(clock),
-            .ena(we),
-            .q(regi[j]),
-            .clr(ctrl_reset)
-        );
-    end
-endgenerate
-
-			assign VGA_score = regi[27];			
-			
-
+            reg_32 banana(
+                .d(dataToWrite),
+                .clk(clock),
+                .ena(we),
+                .q(regi[j]),
+                .clr(ctrl_reset)
+            );
         end
     endgenerate
 
-
+    //score register is Register 2, to match with MIPS
+	assign VGA_score = regi[2];			
 
 	//send each bit of data_wrtie (RDVAL) into each register
 	//tt_reg(d, clk, in_ena, out_ena, q, clr)
@@ -76,7 +71,5 @@ endgenerate
 	//dont send in the ctrl_writeEnable (WE), ctrl_writeReg (RD) yet, you 
 	//have to pass these through the decoder and AND gate, which
 	//will be wires you can pass to the tt_reg AFTER!!!!
-
-
 
 endmodule

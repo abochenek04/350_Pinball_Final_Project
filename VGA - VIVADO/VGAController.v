@@ -18,6 +18,7 @@ module VGAController(
     wire [7:0] ascii_tens;
     wire [7:0] ascii_ones;
     
+    //could be an issue
     localparam FILES_PATH = "C:/Users/amb350/Downloads/lab7-8_kit/";
 
     // --- Clock and Timing ---
@@ -128,8 +129,6 @@ module VGAController(
         title[11] = 69; // E
     end
 
-    
-
     //logic for getting the title/pixes centered on the screen bounded
     wire inside_text;
     assign inside_text = (y >= TEXT_Y && y < TEXT_Y + SPRITE_WIDTH) &&
@@ -159,11 +158,6 @@ module VGAController(
     wire draw_text_pixel;
     assign draw_text_pixel = inside_text && valid_char && sprite_bit;
     
-
-
-
-
-    
     //Score display
     reg [7:0] score_label [0:SCORE_LABEL_LEN-1];
     initial begin
@@ -174,18 +168,6 @@ module VGAController(
         score_label[4] = 69; // E
     end
     
-
-    //Change the 32 bit input from the score register ($2) to a decimal value (up to 5 decimal values long)
-
-    //always be chekcing this (always loop perhaps)
-    //once we have a input that is 5 digits (ie. 32400), 
-    //use logic to decode what the digit is at each spot (or extract bit by bit from this value actually)?
-
-    //instead of hardcoding a specific avlue, take this general number (for exmaple 3) in that position and find its ASCII value and assign that to print
-
-
-    //chnage to reflect score obtained by user during gameplay
-    //feed input from register. Either the full score, or break down the register bits into indiviaul and then place the individuals
     score_to_ascii score_conv (
         .score(VGA_score),
         .ascii_tenThou(ascii_tenThou),
@@ -195,14 +177,13 @@ module VGAController(
         .ascii_ones(ascii_ones)
     );
     
+    //will update when wire chnages values
     reg [7:0] score_digits [0:SCORE_DIGITS-1];
-    initial begin
-        score_digits[0] = ascii_tenThou;
-        score_digits[1] = ascii_thousands; // '0'
-        score_digits[2] = ascii_hundreds; // '4'
-        score_digits[3] = ascii_tens; // '5'
-        score_digits[4] = ascii_ones; // '9'
-    end
+    score_digits[0] = ascii_tenThou;
+    score_digits[1] = ascii_thousands; // '0'
+    score_digits[2] = ascii_hundreds; // '4'
+    score_digits[3] = ascii_tens; // '5'
+    score_digits[4] = ascii_ones; // '9'
     
     wire inside_score;
     assign inside_score =  (y >= SCORE_Y && y < SCORE_Y + SCORE_SPRITE_WIDTH) &&
