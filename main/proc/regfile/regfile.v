@@ -2,7 +2,7 @@ module regfile (
 	clock,
 	ctrl_writeEnable, ctrl_reset, ctrl_writeReg,
 	ctrl_readRegA, ctrl_readRegB, data_writeReg,
-	data_readRegA, data_readRegB
+	data_readRegA, data_readRegB, VGA_score
 );
 
 	input clock, ctrl_writeEnable, ctrl_reset;
@@ -10,7 +10,7 @@ module regfile (
 	input [31:0] data_writeReg;
 
 	output [31:0] data_readRegA, data_readRegB;
-
+	output [31:0] VGA_score;
 	wire [31:0] w1, w2, w3;
 	//5:32 decoder with RD going through decoder, ouput is 31:0 reg_file_input
 	//5:32 decoder with RS1 going through decoder, ouput is 31:0 enable for RS1VAL
@@ -32,35 +32,37 @@ module regfile (
     endgenerate
 
 
-	genvar j;
-    generate 
-        for (j = 1; j < 32; j = j + 1) begin
-            reg_32 banana(
-                .d(data_writeReg), 
-                .clk(clock), 
-                .ena(w1[j]), 
-                .q(regi[j]), 
-                .clr(ctrl_reset)
-            );
+genvar j;
+generate
+    for (j = 1; j < 32; j = j + 1) begin : REGS
+        wire [31:0] dataToWrite;
+        wire we;
 
-			
-            // WE NEED 5 REGISTERs IN TOTAL one for the 2 triangles one for each mushroom and one for the ball return
+        assign dataToWrite =
+            (j == 28) ? {31'b0, JD[1]} :
+            (j == 29) ? {31'b0, JD[2]} :
+            (j == 30) ? {31'b0, JD[3]} :
+            (j == 31) ? {31'b0, JD[4]} :
+                        data_writeReg;
 
-            assign dataToWrite = (i == 28) ? bumper1 : data_writeReg;
-            assign we = (i == 28) ? 1'bl : decoded_writeReg[i];
+        assign we =
+            (j == 28) ? 1'b1 :
+            (j == 29) ? 1'b1 :
+            (j == 30) ? 1'b1 :
+            (j == 31) ? 1'b1 :
+                        w1[j];
 
-			assign dataToWrite = (i == 29) ? bumper2 : data_writeReg;
-			assign we = (i == 29) ? 1'bl : decoded_writeReg[i];
+        reg_32 banana(
+            .d(dataToWrite),
+            .clk(clock),
+            .ena(we),
+            .q(regi[j]),
+            .clr(ctrl_reset)
+        );
+    end
+endgenerate
 
-			assign dataToWrite = (i == 30) ? bumper3 : data_writeReg;
-			assign we = (i == 30) ? 1'bl : decoded_writeReg[i];
-
-			assign dataToWrite = (i == 31) ? bumper4 : data_writeReg;
-			assign we = (i == 31) ? 1'bl : decoded_writeReg[i];
-
-
-            assign VGA_score = (i == 32) ? regOut : {32{1'bz}};
-			
+			assign VGA_score = regi[27];			
 			
 
         end

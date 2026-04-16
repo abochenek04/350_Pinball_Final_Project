@@ -1,16 +1,14 @@
 `timescale 1 ns/ 100 ps
-
-module VGAController(     
-    input clk,          // 100 MHz System Clock
-    input reset,        // Reset Signal
-    output hSync,       
-    output vSync,       
-    output[3:0] VGA_R,  
-    output[3:0] VGA_G,  
-    output[3:0] VGA_B
+module VGAController(
+    input clk,
+    input reset,
+    output hSync,
+    output vSync,
+    output [3:0] VGA_R,
+    output [3:0] VGA_G,
+    output [3:0] VGA_B,
     input [31:0] VGA_score
-    );
-
+);
     // --- Signals ---
     reg [9:0] ref_x, ref_y;
     
@@ -155,6 +153,12 @@ module VGAController(
     wire draw_text_pixel;
     assign draw_text_pixel = inside_text && valid_char && sprite_bit;
     
+
+    wire [7:0] score_ascii_3, score_ascii_2, score_ascii_1, score_ascii_0;
+
+
+
+    
     //Score display
     reg [7:0] score_label [0:SCORE_LABEL_LEN-1];
     initial begin
@@ -177,13 +181,21 @@ module VGAController(
 
     //chnage to reflect score obtained by user during gameplay
     //feed input from register. Either the full score, or break down the register bits into indiviaul and then place the individuals
+        score_to_ascii s2a(
+    .score(VGA_score),
+    .ascii_thousands(score_ascii_3),
+    .ascii_hundreds(score_ascii_2),
+    .ascii_tens(score_ascii_1),
+    .ascii_ones(score_ascii_0)
+    );
+    
     reg [7:0] score_digits [0:SCORE_DIGITS-1];
     initial begin
-        VGA_score
-        score_digits[0] = 48; // '0'
-        score_digits[1] = 52; // '4'
-        score_digits[2] = 53; // '5'
-        score_digits[3] = 57; // '9'
+        score_digits[1] = VGA_score[0];
+        score_digits[0] = VGA_score[1]; // '0'
+        score_digits[1] = VGA_score[2]; // '4'
+        score_digits[2] = VGA_score[3]; // '5'
+        score_digits[3] = VGA_score[4]; // '9'
     end
     
     wire inside_score;

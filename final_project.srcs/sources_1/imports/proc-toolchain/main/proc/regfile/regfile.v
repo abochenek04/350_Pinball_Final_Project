@@ -2,13 +2,12 @@ module regfile (
 	clock,
 	ctrl_writeEnable, ctrl_reset, ctrl_writeReg,
 	ctrl_readRegA, ctrl_readRegB, data_writeReg,
-	data_readRegA, data_readRegB
-);
-
+	data_readRegA, data_readRegB, JD, VGA_score);
+    input [10:1] JD;
 	input clock, ctrl_writeEnable, ctrl_reset;
 	input [4:0] ctrl_writeReg, ctrl_readRegA, ctrl_readRegB;
 	input [31:0] data_writeReg;
-
+    output VGA_score;
 	output [31:0] data_readRegA, data_readRegB;
 
 	wire [31:0] w1, w2, w3;
@@ -34,7 +33,7 @@ module regfile (
 
 	genvar j;
     generate 
-        for (j = 1; j < 32; j = j + 1) begin
+        for (j = 1; j < 32; j = j + 1) begin:registers
             reg_32 banana(
                 .d(data_writeReg), 
                 .clk(clock), 
@@ -42,6 +41,26 @@ module regfile (
                 .q(regi[j]), 
                 .clr(ctrl_reset)
             );
+            		
+            // WE NEED 5 REGISTERs IN TOTAL one for the 2 triangles one for each mushroom and one for the ball return
+            assign dataToWrite = (j == 28) ? JD[1] : data_writeReg;
+            assign we = (j == 28) ? 1'b1 : w1[j];
+
+			assign dataToWrite = (j == 29) ? JD[2] : data_writeReg;
+			assign we = (j == 29) ? 1'b1 : w1[j];
+
+			assign dataToWrite = (j == 30) ? JD[3] : data_writeReg;
+			assign we = (j == 30) ? 1'b1 : w1[j];
+
+			assign dataToWrite = (k == 31) ? JD[4] : data_writeReg;
+			assign we = (k == 31) ? 1'b1 : w1[j];
+
+
+            assign VGA_score = (j == 2) ? regi[j] : {32{1'bz}};
+			
+			
+
+        
         end
     endgenerate
 
