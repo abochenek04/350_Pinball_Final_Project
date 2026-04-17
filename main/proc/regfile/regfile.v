@@ -39,6 +39,8 @@ module regfile (
             wire we;
 
             assign dataToWrite =
+                (j == 27) ? {31'b0, JD[8]} :
+                (j == 26) ? {31'b0, JD[7]} :
                 (j == 28) ? {31'b0, JD[1]} :
                 (j == 29) ? {31'b0, JD[2]} :
                 (j == 30) ? {31'b0, JD[3]} :
