@@ -179,11 +179,14 @@ module VGAController(
     
     //will update when wire chnages values
     reg [7:0] score_digits [0:SCORE_DIGITS-1];
-    score_digits[0] = ascii_tenThou;
-    score_digits[1] = ascii_thousands; // '0'
-    score_digits[2] = ascii_hundreds; // '4'
-    score_digits[3] = ascii_tens; // '5'
-    score_digits[4] = ascii_ones; // '9'
+    always @(*)
+    begin
+        score_digits[0] = ascii_tenThou;
+        score_digits[1] = ascii_thousands; // '0'
+        score_digits[2] = ascii_hundreds; // '4'
+        score_digits[3] = ascii_tens; // '5'
+        score_digits[4] = ascii_ones; // '9'
+    end
     
     wire inside_score;
     assign inside_score =  (y >= SCORE_Y && y < SCORE_Y + SCORE_SPRITE_WIDTH) &&

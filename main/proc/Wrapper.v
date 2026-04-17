@@ -45,7 +45,7 @@ module Wrapper (clock, reset);
 		// Regfile
 		.ctrl_writeEnable(rwe),     .ctrl_writeReg(rd),
 		.ctrl_readRegA(rs1),     .ctrl_readRegB(rs2), 
-		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB)
+		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB),
 									
 		// RAM
 		.wren(mwe), .address_dmem(memAddr), 
